@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'calendar_screen.dart';
+import 'BloomBuddy.dart';
+import 'greenhouse_models.dart';
+import 'greenhouse_service.dart';
 
 void main() => runApp(const PlantApp());
 const String serverBaseUrl = "http://64.131.107.11:8000"; // may need to be changed
@@ -38,6 +41,7 @@ class _RootNavState extends State<RootNav> {
     HomePlantsPage(),
     MessagesPage(),
     CalendarScreen(),
+    BloomBuddy()
   ];
 
   @override
@@ -51,6 +55,7 @@ class _RootNavState extends State<RootNav> {
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chat'),
           NavigationDestination(icon: Icon(Icons.calendar_month_outlined), selectedIcon: Icon(Icons.calendar_month), label: 'Calendar'),
+          NavigationDestination(icon: Icon(Icons.local_florist_outlined), selectedIcon: Icon(Icons.local_florist), label: 'Statistics'),
         ],
       ),
     );
