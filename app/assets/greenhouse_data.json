@@ -1,0 +1,36 @@
+{
+  "greenhouse_id": "GH-01",
+  "location": "Zone-A",
+  "timestamp": "2026-02-24T14:32:10Z",
+  "devices": [
+    {
+      "device_id": "PLANT-SENSOR-001",
+      "type": "soil_multisensor",
+      "battery_level_percent": 86,
+      "readings": {
+        "temperature_celsius": 23.7,
+        "humidity_percent": 68.4,
+        "electrical_conductivity_ms_cm": 1.82,
+        "ph": 6.4,
+        "nutrients_mg_kg": {
+          "nitrogen": 42,
+          "phosphorus": 18,
+          "potassium": 156
+        }
+      },
+      "status": "online",
+      "last_calibrated": "2026-02-01"
+    },
+    {
+      "device_id": "LIGHT-SENSOR-002",
+      "type": "light_sensor",
+      "battery_level_percent": 92,
+      "readings": {
+        "light_intensity_lux": 18500,
+        "par_umol_m2_s": 420
+      },
+      "status": "online",
+      "last_calibrated": "2026-01-20"
+    }
+  ]
+}
