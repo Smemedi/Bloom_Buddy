@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../task.dart';
+import '../utils/task.dart';
 import '../utils/recurrence_utils.dart';
 
 class TaskList extends StatelessWidget {

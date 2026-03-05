@@ -4,9 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'calendar_screen.dart';
-import 'BloomBuddy.dart';
-import 'greenhouse_models.dart';
-import 'greenhouse_service.dart';
+import 'statistics_dashboard.dart';
 
 void main() => runApp(const PlantApp());
 const String serverBaseUrl = "http://64.131.107.11:8000"; // may need to be changed

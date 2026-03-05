@@ -12,7 +12,7 @@ const _textPrimary = Color(0xFFE8F5E9);
 const _textSecondary = Color(0xFF9CBA9E);
 
 // ─── Scale helper ─────────────────────────────────────────────────────────────
-
+// TODO: implement dashboard into its own plant card
 class AppScale {
   final double factor;
   const AppScale(this.factor);

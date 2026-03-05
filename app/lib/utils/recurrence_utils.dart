@@ -1,4 +1,4 @@
-import '../task.dart';
+import 'task.dart';
 
 String getRecurrenceName(RecurrencePattern pattern) {
   switch (pattern) {

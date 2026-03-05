@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../task.dart';
+import '../utils/task.dart';
 import '../utils/recurrence_utils.dart';
 
 /// Displays a dialog that allows the user to enter a task title and select a

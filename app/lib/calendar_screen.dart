@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:uuid/uuid.dart';
-import 'task.dart';
+import 'utils/task.dart';
 
 // modular widgets and utilities
 import 'widgets/calendar_header.dart';
@@ -120,7 +120,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           currentDate.add(Duration(days: getRecurrenceDays(pattern)));
     }
   }
-
+  // TODO: remove function
   Future<void> _showTestNotification() async {
     try {
       await NotificationService.showTestNotification();
