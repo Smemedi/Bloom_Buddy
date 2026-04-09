@@ -38,10 +38,13 @@ class _RootNavState extends State<RootNav> {
   final _pages = const [
     HomePlantsPage(),
     MessagesPage(),
+    CameraDetectionPage(),
     CalendarScreen(),
-    BloomBuddy()
+    BloomBuddy(),
+    
   ];
 
+//Nabigation bar for the app
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +55,7 @@ class _RootNavState extends State<RootNav> {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chat'),
+          NavigationDestination(icon: Icon(Icons.camera_alt_outlined), selectedIcon: Icon(Icons.camera_alt), label: 'Scan'),
           NavigationDestination(icon: Icon(Icons.calendar_month_outlined), selectedIcon: Icon(Icons.calendar_month), label: 'Calendar'),
           NavigationDestination(icon: Icon(Icons.local_florist_outlined), selectedIcon: Icon(Icons.local_florist), label: 'Statistics'),
         ],
@@ -59,7 +63,7 @@ class _RootNavState extends State<RootNav> {
     );
   }
 }
-
+//Home Page 
 class HomePlantsPage extends StatefulWidget {
   const HomePlantsPage({super.key});
 
@@ -248,7 +252,7 @@ Future<void> _addPlantDialog() async {
   }
 }
 
-
+//HomePage ends
 
   @override
   Widget build(BuildContext context) {
@@ -271,10 +275,14 @@ Future<void> _addPlantDialog() async {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
+                    children: [
+                      Center(
+                        child: Text(
                         'Bloom Buddy',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 56, fontWeight: FontWeight.w800),
+                      ),
                       ),
                       SizedBox(height: 4),
                       //Text(
@@ -284,8 +292,10 @@ Future<void> _addPlantDialog() async {
                     ],
                   ),
                 ),
+            
               ],
             ),
+        
             const SizedBox(height: 14),
 
             // Search bar placeholder (optional; matches the layout)
@@ -376,6 +386,9 @@ Future<void> _addPlantDialog() async {
       ),
     );
   }
+//Adding to Home screen
+
+
 }
 
 class _EmptyState extends StatelessWidget {
@@ -1205,6 +1218,222 @@ class _DiseaseRow extends StatelessWidget {
             style: const TextStyle(color: Colors.black54),
           ),
         ],
+      ),
+    );
+
+
+  }
+  
+}
+
+// Camera page with detection
+class CameraDetectionPage extends StatefulWidget {
+  const CameraDetectionPage({super.key});
+
+  @override
+  State<CameraDetectionPage> createState() => _CameraDetectionPageState();
+}
+
+class _CameraDetectionPageState extends State<CameraDetectionPage> {
+  final ImagePicker _picker = ImagePicker();
+  String? _imagePath;
+  bool _loading = false;
+  String? _species;
+  List<Map<String, dynamic>> _diseases = [];
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picked = await _picker.pickImage(source: source, imageQuality: 90);
+    if (picked == null) return;
+
+    setState(() {
+      _imagePath = picked.path;
+      _loading = true;
+      _species = null;
+      _diseases = [];
+    });
+
+    try {
+      // Run both detections in parallel
+      final results = await Future.wait([
+        _detectSpecies(picked.path),
+        _detectDisease(picked.path),
+      ]);
+
+      if (!mounted) return;
+      setState(() {
+        _species = results[0] as String?;
+        _diseases = results[1] as List<Map<String, dynamic>>;
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Detection failed: $e')),
+      );
+    }
+  }
+
+  Future<String?> _detectSpecies(String imagePath) async {
+    final uri = Uri.parse("$serverBaseUrl/predict?top_k=1");
+    final request = http.MultipartRequest("POST", uri);
+    request.files.add(await http.MultipartFile.fromPath("file", imagePath));
+    final streamed = await request.send();
+    final resp = await http.Response.fromStream(streamed);
+    if (resp.statusCode != 200) return null;
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    final raw = data["top"] as String?;
+    if (raw == null) return null;
+    String cleaned = raw.replaceAll('_', ' ');
+    final parts = cleaned.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    if (parts.length >= 3 && RegExp(r'^[A-Z]').hasMatch(parts.last)) {
+      return '${parts[0]} ${parts[1]}';
+    }
+    return parts.join(' ');
+  }
+
+  Future<List<Map<String, dynamic>>> _detectDisease(String imagePath) async {
+    final uri = Uri.parse("$serverBaseUrl/disease_predict?top_k=3");
+    final request = http.MultipartRequest("POST", uri);
+    request.files.add(await http.MultipartFile.fromPath("file", imagePath));
+    final streamed = await request.send();
+    final resp = await http.Response.fromStream(streamed);
+    if (resp.statusCode != 200) return [];
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+    return (data["predictions"] as List)
+        .map((e) => (e as Map).map((k, v) => MapEntry(k.toString(), v)))
+        .toList()
+        .cast<Map<String, dynamic>>();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final topPad = MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(18, topPad + 18, 18, 18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Scan Plant',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Identify species and detect disease',
+              style: TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+            const SizedBox(height: 18),
+
+            // Photo source buttons
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: _loading ? null : () => _pickImage(ImageSource.camera),
+                    icon: const Icon(Icons.camera_alt_outlined),
+                    label: const Text('Camera'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _loading ? null : () => _pickImage(ImageSource.gallery),
+                    icon: const Icon(Icons.photo_library_outlined),
+                    label: const Text('Gallery'),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 18),
+
+            // Image preview
+            if (_imagePath != null) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 220,
+                  child: Image.file(File(_imagePath!), fit: BoxFit.cover),
+                ),
+              ),
+              const SizedBox(height: 18),
+            ],
+
+            // Loading indicator
+            if (_loading)
+              const Center(child: CircularProgressIndicator()),
+
+            // Results
+            if (!_loading && _imagePath != null) ...[
+              // Species result
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: Colors.green.withOpacity(0.2)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Species',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _species ?? '—',
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+              // Disease results
+              const Text(
+                'Disease Detection (Top 3)',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 8),
+
+              if (_diseases.isEmpty)
+                const Text('No disease results.', style: TextStyle(color: Colors.black54))
+              else
+                for (int i = 0; i < _diseases.length; i++)
+                  _DiseaseRow(
+                    rank: i + 1,
+                    label: _diseases[i]["label"]?.toString() ?? "Unknown",
+                    score: (_diseases[i]["score"] as num?)?.toDouble() ?? 0.0,
+                  ),
+            ],
+
+            // Placeholder when no image yet
+            if (_imagePath == null)
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.camera_alt, size: 56, color: Colors.black26),
+                      SizedBox(height: 12),
+                      Text(
+                        'Take or select a photo\nto identify your plant',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black45, fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
