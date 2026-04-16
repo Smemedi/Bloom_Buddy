@@ -31,3 +31,18 @@ Training Models: Eileen Garay & Elijah Perez
 
 Backend: Sokol Memedi
 UI/UX: Ariah Pittman
+
+## Arduino Instructions
+### Setting Up Device
+1. Connect the RS485 shield to the Arduino by slotting the shield's pins on top of the Arduino's slots
+2. Use a USB cable to connect the device to a computer
+3. Open the Arduino IDE and select the right board and port
+### Setting Up Sensors
+1. Connect only the soil sensor and use the Arduino IDE to upload the "Set_Soil_Sensor_ID.ino"
+2. After running it, power cycle the sensor by turning it off, then on again
+3. Disconnect the soil sensor and plug in the light sensor
+4. Upload the "Set_Light_BAUD_Rate.ino" and power cycle the device
+### Assembling Device
+1. Plug in each wire to its respective slot
+2. Make sure no wires are touching another port's wires and that every wire is connected in the right place
+3. Upload "Sensor_Reading.ino" to device
