@@ -19,9 +19,7 @@ Training model: Optimized the ML pipeline through feature engineering, class bal
 - Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
 
 ## Team
-<a href="https://github.com/Smemedi/Bloom_Buddy/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Smemedi/Bloom_Buddy" />
-</a>
+[![Contributors](https://contrib.rocks/image?repo=Smemedi/Bloom_Buddy)](https://github.com/Smemedi/Bloom_Buddy/graphs/contributors)
 
 Co-lead: Victoria Li
 Co-lead: Zuha Ansari
