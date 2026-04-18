@@ -4,11 +4,11 @@ An application to optimize your garden and take care of your plants. Features in
 
 ## How It's Made:
 
-**Tech Used**: 
-Training model: ExtraTrees, SHAP, [Elijah's P model]
-Database: [Elijah's H Database]
-Backend: 
-Frontend:
+**Tech Used**:  
+- Training model: ExtraTrees, SHAP, [Elijah's P model]  
+- Database: [Elijah's H Database]  
+- Backend:  
+- Frontend:
 
 ## Optimizations
 
