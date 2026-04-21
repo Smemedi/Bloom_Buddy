@@ -22,11 +22,11 @@ Instructors: [Robert Ellis](https://www.linkedin.com/in/robert-ellis-6914463/) &
 An application to optimize your garden and take care of your plants. Features include a plant scanner to detect the health of the plant, a task calendar to monitor and organize tasks, a statistics dashboard that uploads live data from our companion sensor device, and a chat forum to engage in a community of other gardeners.
 
 **What problem are you solving?**  
-We are solving the problem of the low community of farmmers, we want to bring more attention to the beautiful community by introducing a new way of farming. Instead of guessing whether the plant is healthy, we have the device to tell the client if their plant is healthy.  
+We are solving the problem of the low community of gardeners, we want to bring more attention to the beautiful community by introducing a new way of gardening and farming. Instead of guessing whether the plant is healthy, we have the device to tell the client if their plant is healthy.  
 **Why is it important?**  
 Indoor and backyard farming improves mental well-being by reducing stress and creating a calming connection to nature. It also helps people grow fresh, healthy food at home, reducing reliance on store-bought produce and lowering food costs.  
 **Who is the stakeholder/sponsor?**  
-The stakeholder are the chicagogians  
+The stakeholders are the Chicagoans. 
 **What are your key results?**  
 From the machine learning side of the project, the model has a 88% accuracy score with the ability to tell the user why their plant is unhealthy. 
 
@@ -103,7 +103,16 @@ Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for
 ## Code Overview?
 
 ## How to Run
+```bash
+# Update flutter
+flutter doctor
 
+# Grab dependencies
+flutter pub get
+
+# Run & choose specified device
+flutter run
+```
 ## Data Access
 
 
@@ -118,6 +127,11 @@ Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for
 ## Future Work
 
 ## Arduino Instructions
+### Wiring Diagram
+<p align="center">
+  <img src="Images/wiring_diagram.png" alt="diagram for hardware">
+</p>
+
 ### Setting Up Device
 1. Connect the RS485 shield to the Arduino by slotting the shield's pins on top of the Arduino's slots
 2. Use a USB cable to connect the device to a computer
