@@ -118,7 +118,7 @@ Future<void> showDeleteRecurringTaskDialog(
             children: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel', style: TextStyle(color: Colors.red)),
+                child: const Text('Cancel', style: TextStyle(color: Colors.red, fontSize: 12)),
               ),
               TextButton(
                 onPressed: () {

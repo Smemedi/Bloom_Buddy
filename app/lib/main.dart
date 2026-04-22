@@ -5,9 +5,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'calendar_screen.dart';
 import 'statistics_dashboard.dart';
+import 'recommendations_screen.dart';
 
 void main() => runApp(const PlantApp());
-const String serverBaseUrl = "http://104.194.116.138:8000"; // may need to be changed
+const String serverBaseUrl = "http://127.0.0.1:8000"; // may need to be changed
 class PlantApp extends StatelessWidget {
   const PlantApp({super.key});
 
@@ -39,7 +40,8 @@ class _RootNavState extends State<RootNav> {
     HomePlantsPage(),
     MessagesPage(),
     CalendarScreen(),
-    BloomBuddy()
+    BloomBuddy(),
+    RecommendationsScreen()
   ];
 
   @override
@@ -54,6 +56,7 @@ class _RootNavState extends State<RootNav> {
           NavigationDestination(icon: Icon(Icons.chat_bubble_outline), selectedIcon: Icon(Icons.chat_bubble), label: 'Chat'),
           NavigationDestination(icon: Icon(Icons.calendar_month_outlined), selectedIcon: Icon(Icons.calendar_month), label: 'Calendar'),
           NavigationDestination(icon: Icon(Icons.local_florist_outlined), selectedIcon: Icon(Icons.local_florist), label: 'Statistics'),
+          NavigationDestination(icon: Icon(Icons.recommend_outlined), selectedIcon: Icon(Icons.recommend), label: 'Recommendations' ),
         ],
       ),
     );

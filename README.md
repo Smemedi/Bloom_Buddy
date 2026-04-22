@@ -100,10 +100,31 @@ Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for
 
 ## Negative Result
 
-## Code Overview?
+# Software/Hardware Instructions
 
-## How to Run
+## Server Startup
 ```bash
+# Open backend directory on current path
+cd backend
+
+# Create virtual environment for macOS
+py -m venv env
+
+# Activate virtual environment
+  .\env\Scripts\activate
+
+# Install packages
+pip install -r requirements.txt
+
+# Start server
+uvicorn server:app --host 0.0.0.0 --port 8000
+```
+## App Startup
+```bash
+# Open app directory 
+cd ..
+cd app
+
 # Update flutter
 flutter doctor
 
@@ -113,18 +134,6 @@ flutter pub get
 # Run & choose specified device
 flutter run
 ```
-## Data Access
-
-
-[Crop Health Dataset](https://www.kaggle.com/datasets/datasetengineer/crop-health-and-environmental-stress-dataset/data)
-
-## Conclusion
-
-## What did we learned?
-
-- Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
-
-## Future Work
 
 ## Arduino Instructions
 ### Wiring Diagram
@@ -145,3 +154,14 @@ flutter run
 1. Plug in each wire to its respective slot
 2. Make sure no wires are touching another port's wires and that every wire is connected in the right place
 3. Upload "Sensor_Reading.ino" to device
+
+## Data Access
+[Crop Health Dataset](https://www.kaggle.com/datasets/datasetengineer/crop-health-and-environmental-stress-dataset/data)
+
+## Conclusion
+
+## What did we learned?
+
+- Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
+
+## Future Work
