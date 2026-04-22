@@ -6,10 +6,10 @@ import 'greenhouse_service.dart';
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
 const _bgDark = Color(0xFF0F1A0F);
-const _bgCard = Colors.white;
+const _bgCard = Color(0xFF172317);
 const _green = Color(0xFF4CAF50);
-const _textPrimary = Color(0xFF1B2E1B);
-const _textSecondary = Color(0xFF5A7A5A);
+const _textPrimary = Color(0xFFE8F5E9);
+const _textSecondary = Color(0xFF9CBA9E);
 
 // ─── Scale helper ─────────────────────────────────────────────────────────────
 // TODO: implement dashboard into its own plant card
@@ -39,9 +39,12 @@ class BloomBuddy extends StatelessWidget {
     return MaterialApp(
       title: 'Bloom Buddy',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.green,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: _bgDark,
+        colorScheme: const ColorScheme.dark(
+          primary: _green,
+          surface: _bgCard,
+        ),
       ),
       home: const GreenhouseDashboard(),
     );
@@ -75,6 +78,7 @@ class _GreenhouseDashboardState extends State<GreenhouseDashboard> {
   Widget build(BuildContext context) {
     final sc = AppScale.of(context);
     return Scaffold(
+      backgroundColor: _bgDark,
       body: StreamBuilder<GreenhouseReadings>(
         stream: _service.stream,
         builder: (context, snap) {
@@ -84,16 +88,17 @@ class _GreenhouseDashboardState extends State<GreenhouseDashboard> {
           final r = snap.data!;
           return CustomScrollView(
             slivers: [
+              _AppBar(data: r),
               SliverPadding(
-                padding: EdgeInsets.all(sc.s(15)),
+                padding: EdgeInsets.all(sc.s(16)),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: sc.s(11),
-                      crossAxisSpacing: sc.s(11),
+                      mainAxisSpacing: sc.s(12),
+                      crossAxisSpacing: sc.s(12),
                       childAspectRatio: 1.7,
                       children: [
                         if (r.temperatureCelsius != null)
@@ -111,7 +116,7 @@ class _GreenhouseDashboardState extends State<GreenhouseDashboard> {
                       ],
                     ),
                     if (r.nutrients != null) ...[
-                      SizedBox(height: sc.s(11)),
+                      SizedBox(height: sc.s(12)),
                       NutrientsCard(nutrients: r.nutrients!),
                     ],
                   ]),
@@ -121,6 +126,123 @@ class _GreenhouseDashboardState extends State<GreenhouseDashboard> {
           );
         },
       ),
+    );
+  }
+}
+
+// ─── App bar ──────────────────────────────────────────────────────────────────
+class _AppBar extends StatefulWidget {
+  final GreenhouseReadings data;
+  const _AppBar({required this.data});
+
+  @override
+  State<_AppBar> createState() => _AppBarState();
+}
+
+class _AppBarState extends State<_AppBar> {
+  final _picker = ImagePicker();
+  final List<XFile> _images = [];
+
+  Future<void> _pickImage() async {
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() => _images.add(picked));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: const Color(0xFF172317),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            content: Row(children: [
+              const Icon(Icons.check_circle_outline, color: _green, size: 16),
+              const SizedBox(width: 8),
+              Text(
+                'Image added (${_images.length} total)',
+                style: const TextStyle(color: _textPrimary, fontSize: 13),
+              ),
+            ]),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sc = AppScale.of(context);
+
+    return SliverAppBar(
+      pinned: true,
+      expandedHeight: sc.s(110),
+      backgroundColor: _bgCard,
+      centerTitle: true,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        titlePadding: const EdgeInsets.only(bottom: 12),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.eco, color: _green, size: sc.s(16)),
+              SizedBox(width: sc.s(6)),
+              Text('Bloom Buddy',
+                  style: TextStyle(
+                      color: _textPrimary,
+                      fontSize: sc.s(17),
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.1)),
+              const _PulseDot(),
+            ]),
+            Text('${widget.data.greenhouseId} · ${widget.data.location}',
+                style: TextStyle(color: _textSecondary, fontSize: sc.s(10))),
+          ],
+        ),
+      ),
+      actions: [
+        // ── image count badge + plus button ──
+        Padding(
+          padding: EdgeInsets.only(right: sc.s(12)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: _pickImage,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(Icons.add_box_outlined, color: _green, size: sc.s(24)),
+                    if (_images.isNotEmpty)
+                      Positioned(
+                        top: -sc.s(4),
+                        right: -sc.s(4),
+                        child: Container(
+                          width: sc.s(14),
+                          height: sc.s(14),
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            color: _green,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '${_images.length}',
+                            style: TextStyle(
+                              color: _bgDark,
+                              fontSize: sc.s(8),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -180,44 +302,37 @@ class MetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final sc = AppScale.of(context);
     return Container(
-      padding: EdgeInsets.all(sc.s(13)),
+      padding: EdgeInsets.all(sc.s(14)),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(sc.s(15)),
+        color: _bgCard,
+        borderRadius: BorderRadius.circular(sc.s(16)),
         border: Border.all(color: color.withOpacity(0.25)),
-        boxShadow: [
-          BoxShadow(
-            color: _green.withOpacity(.75),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(children: [
-            Icon(icon, color: color, size: sc.s(13)),
-            SizedBox(width: sc.s(4)),
+            Icon(icon, color: color, size: sc.s(14)),
+            SizedBox(width: sc.s(5)),
             Text(label,
                 style: TextStyle(
                     color: color.withOpacity(0.85),
-                    fontSize: sc.s(9),
+                    fontSize: sc.s(10),
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.w500)),
           ]),
-          SizedBox(height: sc.s(5)),
+          SizedBox(height: sc.s(6)),
           Text(value,
               style: TextStyle(
                   color: _textPrimary,
-                  fontSize: sc.s(21),
+                  fontSize: sc.s(22),
                   fontWeight: FontWeight.w700,
                   height: 1.1)),
           if (subtitle != null)
             Text(subtitle!,
-                style: TextStyle(color: _textSecondary, fontSize: sc.s(9))),
-          SizedBox(height: sc.s(5)),
+                style: TextStyle(color: _textSecondary, fontSize: sc.s(10))),
+          SizedBox(height: sc.s(6)),
           if (bottom != null) bottom!,
         ],
       ),
@@ -353,46 +468,39 @@ class NutrientsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final sc = AppScale.of(context);
     return Container(
-      padding: EdgeInsets.all(sc.s(15)),
+      padding: EdgeInsets.all(sc.s(16)),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(sc.s(15)),
+        color: _bgCard,
+        borderRadius: BorderRadius.circular(sc.s(16)),
         border: Border.all(color: _green.withOpacity(0.25)),
-        boxShadow: [
-          BoxShadow(
-            color: _green.withOpacity(0.75),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            Icon(Icons.grass, color: _green, size: sc.s(15)),
-            SizedBox(width: sc.s(5)),
+            Icon(Icons.grass, color: _green, size: sc.s(16)),
+            SizedBox(width: sc.s(6)),
             Text('Nutrients',
                 style: TextStyle(
                     color: _green,
-                    fontSize: sc.s(10),
+                    fontSize: sc.s(11),
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.w500)),
             const Spacer(),
             Text('mg/kg',
-                style: TextStyle(color: _textSecondary, fontSize: sc.s(9))),
+                style: TextStyle(color: _textSecondary, fontSize: sc.s(10))),
           ]),
-          SizedBox(height: sc.s(13)),
+          SizedBox(height: sc.s(14)),
           _NutrientRow(
               symbol: 'N', name: 'Nitrogen',
               value: nutrients.nitrogen, max: 100,
               color: const Color(0xFF81C784)),
-          SizedBox(height: sc.s(9)),
+          SizedBox(height: sc.s(10)),
           _NutrientRow(
               symbol: 'P', name: 'Phosphorus',
               value: nutrients.phosphorus, max: 50,
               color: const Color(0xFF64B5F6)),
-          SizedBox(height: sc.s(9)),
+          SizedBox(height: sc.s(10)),
           _NutrientRow(
               symbol: 'K', name: 'Potassium',
               value: nutrients.potassium, max: 300,
@@ -425,20 +533,20 @@ class _NutrientRow extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: sc.s(23),
-          height: sc.s(23),
+          width: sc.s(24),
+          height: sc.s(24),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: color.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(sc.s(5)),
+            borderRadius: BorderRadius.circular(sc.s(6)),
           ),
           child: Text(symbol,
               style: TextStyle(
                   color: color,
-                  fontSize: sc.s(10),
+                  fontSize: sc.s(11),
                   fontWeight: FontWeight.w700)),
         ),
-        SizedBox(width: sc.s(11)),
+        SizedBox(width: sc.s(10)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,22 +556,22 @@ class _NutrientRow extends StatelessWidget {
                 children: [
                   Text(name,
                       style: TextStyle(
-                          color: _textSecondary, fontSize: sc.s(10))),
+                          color: _textSecondary, fontSize: sc.s(11))),
                   Text(value.toStringAsFixed(1),
                       style: TextStyle(
                           color: color,
-                          fontSize: sc.s(10),
+                          fontSize: sc.s(11),
                           fontWeight: FontWeight.w600)),
                 ],
               ),
-              SizedBox(height: sc.s(3)),
+              SizedBox(height: sc.s(4)),
               ClipRRect(
-                borderRadius: BorderRadius.circular(sc.s(3)),
+                borderRadius: BorderRadius.circular(sc.s(4)),
                 child: LinearProgressIndicator(
                   value: frac,
                   backgroundColor: color.withOpacity(0.12),
                   valueColor: AlwaysStoppedAnimation(color),
-                  minHeight: sc.s(4),
+                  minHeight: sc.s(5),
                 ),
               ),
             ],
@@ -484,12 +592,12 @@ class _ThinBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final sc = AppScale.of(context);
     return ClipRRect(
-      borderRadius: BorderRadius.circular(sc.s(2)),
+      borderRadius: BorderRadius.circular(sc.s(3)),
       child: LinearProgressIndicator(
         value: value,
         backgroundColor: color.withOpacity(0.12),
         valueColor: AlwaysStoppedAnimation(color),
-        minHeight: sc.s(3),
+        minHeight: sc.s(4),
       ),
     );
   }
