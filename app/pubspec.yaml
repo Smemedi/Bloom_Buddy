@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 name: app
 description: "Plant care assistant app to help you maintain your plants"
 publish_to: 'none'
@@ -30,13 +29,10 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
 
 flutter:
-
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
   assets:
-      - assets/greenhouse_data.json
-      - assets/icon.png
+    - assets/greenhouse_data.json
+    - assets/icon.png
 
 flutter_launcher_icons:
   android: true
@@ -44,48 +40,3 @@ flutter_launcher_icons:
   macos:
     generate: true
   image_path: "assets/icon.png"
-=======
-name: app
-description: "Plant care assistant app to help you maintain your plants"
-publish_to: 'none'
-version: 1.0.0+1
-
-environment:
-  sdk: ^3.11.1
-
-dependencies:
-  flutter:
-    sdk: flutter
-  camera: ^0.10.0
-  path_provider: ^2.1.5
-  image_picker: ^1.2.1
-  http: ^1.6.0
-  table_calendar: ^3.0.9
-  shared_preferences: ^2.0.15
-  flutter_local_notifications: ^17.0.0
-  timezone: ^0.9.0
-  uuid: ^4.0.0
-  cupertino_icons: ^1.0.8
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
-  flutter_launcher_icons: ^0.14.4
-
-flutter:
-
-  uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  assets:
-      - assets/greenhouse_data.json
-      - assets/icon.png
-
-flutter_launcher_icons:
-  android: true
-  ios: true
-  macos:
-    generate: true
-  image_path: "assets/icon.png"
->>>>>>> 54f19e3aaee5b014b33cf6ea2d25b1baf0e38c71
