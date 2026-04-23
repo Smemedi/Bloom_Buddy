@@ -22,21 +22,23 @@ Instructors: [Robert Ellis](https://www.linkedin.com/in/robert-ellis-6914463/) &
 An application to optimize your garden and take care of your plants. Features include a plant scanner to detect the health of the plant, a task calendar to monitor and organize tasks, a statistics dashboard that uploads live data from our companion sensor device, and a chat forum to engage in a community of other gardeners.
 
 **What problem are you solving?**  
-We are solving the problem of the low community of farmmers, we want to bring more attention to the beautiful community by introducing a new way of farming. Instead of guessing whether the plant is healthy, we have the device to tell the client if their plant is healthy.  
+We are solving the problem of the low community of gardeners, we want to bring more attention to the beautiful community by introducing a new way of gardening and farming. Instead of guessing whether the plant is healthy, we have the device to tell the client if their plant is healthy.  
 **Why is it important?**  
 Indoor and backyard farming improves mental well-being by reducing stress and creating a calming connection to nature. It also helps people grow fresh, healthy food at home, reducing reliance on store-bought produce and lowering food costs.  
 **Who is the stakeholder/sponsor?**  
-The stakeholder are the chicagogians  
-**What are your key results?**  
+The stakeholders are the Chicagoans.  
+**What are your key results?**    
 From the machine learning side of the project, the model has a 88% accuracy score with the ability to tell the user why their plant is unhealthy. 
 
 ## Introduction
-*this is more techinal*
-
-- Background of the problem
-- Context and motivation
-- Why this problem matters
-- Overview of your approach
+**Background of the problem**  
+Despite the growing popularity gardening, many individuals lack the technical knowledge required to effectively monitor plant health and optimize growth conditions. Traditional gardening often relies on manual observation and experience, which can lead to inconsistent results, misdiagnosis of plant diseases, and inefficient care routines.  
+**Context and motivation**  
+Recent advancements in mobile applications, Internet of Things (IoT) devices, and machine learning have created new opportunities to modernize plant care. The motivation behind this project is to unify these technologies into a single, cohesive system that enhances accessibility and usability for both novice and experienced gardeners.  
+**Why this problem matters**  
+Inefficient plant care not only discourages participation in gardening but also leads to wasted resources such as water, soil, and plant materials. Additionally, the absence of a strong, connected gardening community reduces knowledge sharing and long-term engagement. Addressing these challenges can improve user success rates, promote sustainable practices, and increase adoption of home-based food production.  
+**Overview of our approach**  
+This project proposes a multi-component application that integrates computer vision, IoT sensor data, and user interaction features. A neural network-based plant scanner analyzes images to detect signs of disease or stress, while a companion sensor device collects real-time environmental data such as soil moisture, temperature, and light levels. This data is processed and visualized through a statistics dashboard to provide actionable insights. 
 
 ## Project Structure
 ```
@@ -56,8 +58,7 @@ Bloom_Buddy/
 **1. Data Preprocessing**
 
 - Dataset: Agricultural sensor data loaded from CSV
-- Feature Selection: Dropped image-based features (RGB, multispectral, thermal, spatial) and kept edge-deployable sensor readings
-- Encoding: Crop types encoded numerically (Wheat=0, Rice=1, Maize=2)  
+- Feature Selection: Dropped image-based features (RGB, multispectral, thermal, spatial) and kept edge-deployable sensor readings  
 
 **2. Exploratory Data Analysis**  
 
@@ -95,29 +96,64 @@ Three resampling strategies compared:
 Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for edge deployment with SHAP-based recommendations.  
 
 ## Result & Visualization
+<p align="center">
+<img src="Images/Model_Comparisons.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
+This chart compares the performance of multiple machine learning models evaluated during the project. Metrics such as accuracy, F1-score, and AUC-ROC are visualized for each classifier, allowing for a clear comparison of their strengths and weaknesses. The figure demonstrates why the ExtraTreesClassifier was selected as the final model for deployment.
 
-![ExrtaTreesMatrix](Images/ExtraTreesMatrix.png)
+<p align="center">
+<img src="Images/ExtraTreesMatrix.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
 
-## Negative Result
+This image displays the confusion matrix for the ExtraTreesClassifier model. It visually summarizes the model’s classification performance by showing the number of correct and incorrect predictions for each crop health class. The matrix highlights the model’s accuracy and any potential misclassifications, providing insight into which classes are most reliably predicted.
 
-## Code Overview?
+<p align="center">
+<img src="Images/SHAP_impact_feat.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
 
-## How to Run
+This figure illustrates the SHAP feature importance analysis for the plant stress prediction model. Each feature’s impact on the model’s output is shown, indicating which sensor readings most strongly influence the prediction of plant health or stress. The plot helps interpret the model by revealing the most critical factors affecting its decisions.
 
-## Data Access
+# Software/Hardware Instructions
 
+## Server Startup
+```bash
+# Open backend directory on current path
+cd backend
 
-[Crop Health Dataset](https://www.kaggle.com/datasets/datasetengineer/crop-health-and-environmental-stress-dataset/data)
+# Create virtual environment for macOS
+py -m venv env
 
-## Conclusion
+# Activate virtual environment
+  .\env\Scripts\activate
 
-## What did we learned?
+# Install packages
+pip install -r requirements.txt
 
-- Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
+# Start server
+uvicorn server:app --host 0.0.0.0 --port 8000
+```
+## App Startup
+```bash
+# Open app directory 
+cd ..
+cd app
 
-## Future Work
+# Update flutter
+flutter doctor
+
+# Grab dependencies
+flutter pub get
+
+# Run & choose specified device
+flutter run
+```
 
 ## Arduino Instructions
+### Wiring Diagram
+<p align="center">
+  <img src="Images/wiring_diagram.png" alt="diagram for hardware">
+</p>
+
 ### Setting Up Device
 1. Connect the RS485 shield to the Arduino by slotting the shield's pins on top of the Arduino's slots
 2. Use a USB cable to connect the device to a computer
@@ -131,3 +167,16 @@ Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for
 1. Plug in each wire to its respective slot
 2. Make sure no wires are touching another port's wires and that every wire is connected in the right place
 3. Upload "Sensor_Reading.ino" to device
+
+## Data Access
+[Crop Health Dataset](https://www.kaggle.com/datasets/datasetengineer/crop-health-and-environmental-stress-dataset/data)
+
+## Conclusion
+
+### What did we learned?
+
+- Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
+
+## Future Work
+Our team would love to expand the app to have a community base component. Within the community side of the app, we would add future events within Chicago and post from gardeners from Chicago. (Add more from app team)  
+From the database/ML team we would love to get insight data from conservatory in Chicago and train the model on that data. 
