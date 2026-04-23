@@ -20,6 +20,8 @@ class TaskList extends StatelessWidget {
       return const Center(child: Text('No tasks for this day'));
     }
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         final task = tasks[index];

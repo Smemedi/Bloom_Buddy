@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'widgets/task_list.dart';
+import 'utils/task.dart';
 
 const String _owmApiKey = 'af12586bd2c4a19f1a1271f4bad3e7d6';
 void main() => runApp(const PlantApp());
@@ -163,16 +166,10 @@ class _WeatherDashboardState extends State<WeatherDashboard> {
   final _cityCtrl = TextEditingController(text: 'Chicago');
 
   @override
-  void initState() {
-    super.initState();
-    _load();
-  }
+  void initState() { super.initState(); _load(); }
 
   @override
-  void dispose() {
-    _cityCtrl.dispose();
-    super.dispose();
-  }
+  void dispose() { _cityCtrl.dispose(); super.dispose(); }
 
   Future<void> _load() async {
     setState(() { _loading = true; _error = false; });
@@ -186,6 +183,8 @@ class _WeatherDashboardState extends State<WeatherDashboard> {
     if (!mounted) return;
     setState(() { _loading = false; _weather = data; _error = data == null; });
   }
+
+
 
   void _showCityDialog() async {
     final result = await showDialog<String>(
@@ -213,70 +212,60 @@ class _WeatherDashboardState extends State<WeatherDashboard> {
     }
   }
 
+  
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.teal.shade700,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
       ),
       child: _loading
-          ? const SizedBox(height: 60, child: Center(child: CircularProgressIndicator()))
+          ? const SizedBox(height: 80, child: Center(child: CircularProgressIndicator(color: Colors.white)))
           : _error || _weather == null
-              ? Row(
+              ? Row(children: [
+                  const Icon(Icons.cloud_off, color: Colors.white60),
+                  const SizedBox(width: 10),
+                  const Expanded(child: Text('Weather unavailable', style: TextStyle(color: Colors.white70))),
+                  TextButton(onPressed: _showCityDialog, child: const Text('Set city', style: TextStyle(color: Colors.white))),
+                ])
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.cloud_off, color: Colors.black38),
-                    const SizedBox(width: 10),
-                    const Expanded(child: Text('Weather unavailable', style: TextStyle(color: Colors.black54))),
-                    TextButton(onPressed: _showCityDialog, child: const Text('Set city')),
-                  ],
-                )
-              : Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: _showCityDialog,
-                            child: Row(
-                              children: [
-                                Text(_weather!.cityName, style: const TextStyle(fontSize: 14, color: Colors.black54)),
-                                const SizedBox(width: 4),
-                                const Icon(Icons.edit, size: 13, color: Colors.black38),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text('${_weather!.tempF.round()}°F',
-                              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700)),
-                          Text(_weather!.description,
-                              style: const TextStyle(fontSize: 14, color: Colors.black54)),
-                          const SizedBox(height: 6),
-                          Row(
-                            children: [
-                              Icon(Icons.water_drop_outlined, size: 14, color: Colors.blue.shade300),
-                              const SizedBox(width: 4),
-                              Text('${_weather!.humidity}%', style: const TextStyle(fontSize: 13, color: Colors.black54)),
-                              const SizedBox(width: 12),
-                              Icon(Icons.air, size: 14, color: Colors.blue.shade300),
-                              const SizedBox(width: 4),
-                              Text('${_weather!.windMph.round()} mph', style: const TextStyle(fontSize: 13, color: Colors.black54)),
-                            ],
-                          ),
-                        ],
-                      ),
+                    // Header row
+                    GestureDetector(
+                      onTap: _showCityDialog,
+                      child: Row(children: [
+                        Text('${_weather!.cityName} Weather Today:',
+                            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                        const SizedBox(width: 6),
+                        const Icon(Icons.edit, size: 14, color: Colors.white60),
+                      ]),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    const SizedBox(height: 16),
+                    // Two circular gauges
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(WeatherService.iconEmoji(_weather!.iconCode),
-                            style: const TextStyle(fontSize: 44)),
-                        const SizedBox(height: 4),
-                        Text('H:${_weather!.highF.round()}° L:${_weather!.lowF.round()}°',
-                            style: const TextStyle(fontSize: 13, color: Colors.black54)),
+                        // Humidity gauge
+                        _CircleGauge(
+                          value: _weather!.humidity.toDouble(),
+                          max: 100,
+                          label: '${_weather!.humidity}%',
+                          icon: Icons.umbrella_outlined,
+                          color: Colors.teal.shade300,
+                        ),
+                        // Temperature gauge
+                        _CircleGauge(
+                          value: _weather!.tempF,
+                          max: 120,
+                          label: '${_weather!.tempF.round()}',
+                          sublabel: '${_weather!.lowF.round()}   ${_weather!.highF.round()}',
+                          color: Colors.teal.shade300,
+                        ),
                       ],
                     ),
                   ],
@@ -285,6 +274,61 @@ class _WeatherDashboardState extends State<WeatherDashboard> {
   }
 }
 
+class _CircleGauge extends StatelessWidget {
+  final double value;
+  final double max;
+  final String label;
+  final String? sublabel;
+  final IconData? icon;
+  final Color color;
+
+  const _CircleGauge({
+    required this.value,
+    required this.max,
+    required this.label,
+    this.sublabel,
+    this.icon,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: 100,
+          height: 100,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CircularProgressIndicator(
+                value: value / max,
+                strokeWidth: 8,
+                backgroundColor: Colors.white24,
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+              ),
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (icon != null) Icon(icon, color: Colors.white70, size: 18),
+                    Text(label,
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (sublabel != null) ...[
+          const SizedBox(height: 6),
+          Text(sublabel!, style: const TextStyle(color: Colors.white70, fontSize: 13)),
+        ],
+      ],
+    );
+  }
+}
 // ─── HOME PAGE ───────────────────────────────────────────────────────
 class HomePlantsPage extends StatefulWidget {
   const HomePlantsPage({super.key});
@@ -317,6 +361,7 @@ class _HomePlantsPageState extends State<HomePlantsPage>
 
   final PageController _pageController = PageController(viewportFraction: 0.78);
   final List<Plant> _plants = [];
+  final List<PlantTask> _tasks = [];  // insert tasks
   int _currentIndex = 0;
 
   @override
@@ -427,6 +472,36 @@ class _HomePlantsPageState extends State<HomePlantsPage>
     }
   }
 
+  // task dialog
+  void _addTaskDialog() async {
+  final ctrl = TextEditingController();
+  final result = await showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('Add Task'),
+      content: TextField(
+        controller: ctrl,
+        autofocus: true,
+        decoration: const InputDecoration(labelText: 'Task (e.g., Water @2pm)'),
+        onSubmitted: (_) => Navigator.pop(ctx, ctrl.text.trim()),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+        FilledButton(onPressed: () => Navigator.pop(ctx, ctrl.text.trim()), child: const Text('Add')),
+      ],
+    ),
+  );
+  if (result != null && result.isNotEmpty) {
+    setState(() => _tasks.add(PlantTask(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: result,
+      createdDate: DateTime.now(),
+      )));
+  }
+}
+// end of task dialog
+
+//Bloom Buddy heading
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -443,11 +518,34 @@ class _HomePlantsPageState extends State<HomePlantsPage>
             padding: EdgeInsets.fromLTRB(18, topPad + 18, 18, 0),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Center(
-                  child: const Text('Bloom Buddy',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 56, fontWeight: FontWeight.w800)),
+
+              // "Bloom Buddy" Text widget with:
+              Center(
+
+              child:RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Bloom',
+                      style: GoogleFonts.playfairDisplay(
+                        fontSize: 56,
+                        fontWeight: FontWeight.w800,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '-Buddy',
+                      style: GoogleFonts.inter(
+                        fontSize: 56,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              ),
                 const SizedBox(height: 14),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -525,12 +623,38 @@ class _HomePlantsPageState extends State<HomePlantsPage>
                         ),
                 ),
                 const SizedBox(height: 100),
+
+                  //task build method
+
+                const SizedBox(height: 18),
+                Row(
+                  children: [
+                    const Text('Daily Tasks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: _addTaskDialog,
+                      icon: const Icon(Icons.add_circle_outline),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 300,
+                  child: TaskList(
+                    tasks: _tasks,
+                    onToggleCompletion: (task) => setState(() => task.isCompleted = !task.isCompleted),
+                    onRemove: (task) => setState(() => _tasks.remove(task)),
+                  ),
+                ),
+                const SizedBox(height: 100),
+
+    //end of task build method
               ]),
             ),
           ),
         ],
       ),
     );
+    
   }
 }
 
@@ -1202,5 +1326,7 @@ class _CameraDetectionPageState extends State<CameraDetectionPage> {
         ),
       ),
     );
+    
+  
   }
 }
