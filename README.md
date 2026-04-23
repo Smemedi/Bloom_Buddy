@@ -55,45 +55,13 @@ Bloom_Buddy/
 
 ### Methodology for the ML plant stress prediction:
 
-**1. Data Preprocessing**
+The project starts with preprocessing agricultural sensor data from a CSV file, where certain features are removed to keep only edge-deployable sensor inputs. Exploratory data analysis follows, including target distribution, feature correlations, outlier detection using IQR, and distribution checks (skewness, normality, and KDE), along with pairplots of key features.
 
-- Dataset: Agricultural sensor data loaded from CSV
-- Feature Selection: Dropped image-based features (RGB, multispectral, thermal, spatial) and kept edge-deployable sensor readings  
+To handle class imbalance, SMOTE, ADASYN, and random resampling are compared, with the latter creating a balanced dataset of 300K samples. The data is then split (80/20, stratified), normalized using StandardScaler, and evaluated across 11 classifiers using accuracy, F1-score, and AUC-ROC.
 
-**2. Exploratory Data Analysis**  
+ExtraTreesClassifier performs best and is further optimized via grid search, balancing performance and model size. SHAP is used for interpretability, highlighting feature importance and identifying key stress factors affecting predictions.
 
-- Target distribution visualization (Crop_Health_Label)
-- Feature correlation analysis with target
-- Outlier detection using IQR method
-- Distribution analysis (skewness, normality via Shapiro-Wilk, multimodality via KDE)
-- Pairplots for top correlated features  
-
-**3. Class Imbalance Handling**  
-Three resampling strategies compared:  
-- SMOTE - Synthetic minority oversampling
-- ADASYN - Adaptive synthetic sampling
-- Random Resampling - Combined under/oversampling to 300K balanced samples
-
-**4. Model Training & Selection**  
-- 80/20 train-test split with stratification
-- StandardScaler normalization
-- 11 classifiers evaluated: Logistic Regression, KNN, Decision Tree, Random Forest, Gradient Boosting, AdaBoost, ExtraTrees, Gaussian NB, XGBoost, LightGBM, CatBoost
-- Metrics: Accuracy, F1-Score, AUC-ROC
-
-**5. Hyperparameter Optimization**  
-- Grid search on ExtraTreesClassifier (best performer)
-- Parameters: n_estimators (100-250), max_depth (15-30, None)
-- Trade-off analysis: accuracy vs model storage size
-
-**6. Model Interpretability**  
-- SHAP TreeExplainer for feature importance
-- Directional impact analysis (which features push toward healthy/unhealthy)
-- Top stress causes identification per sample
-
-**7. Deployment Artifacts**  
-- Model, scaler, and label encoder saved via joblib to trained_models/
-- Integration with plant_health_checker.py for inference  
-Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for edge deployment with SHAP-based recommendations.  
+Finally, the model, scaler, and encoder are saved and integrated into an inference script. The final model is an ExtraTreesClassifier (150 estimators, depth 20), optimized for edge deployment with SHAP-based insights.  
 
 ## Result & Visualization
 <p align="center">
