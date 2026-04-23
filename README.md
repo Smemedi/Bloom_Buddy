@@ -7,8 +7,7 @@
 ### Team
 [![Contributors](https://contrib.rocks/image?repo=Smemedi/Bloom_Buddy)](https://github.com/Smemedi/Bloom_Buddy/graphs/contributors)
 
-Co-lead: Victoria Li  
-Co-lead: Zuha Ansari  
+Co-leads: [Victoria Li](https://www.linkedin.com/in/victoria-l-78719628b/) & Zuha Ansari  
 Database: Elijah Hoedl  
 Training Models: [Eileen Garay](https://www.linkedin.com/in/eileen1129/) & Elijah Perez  
 Backend: Sokol Memedi  
@@ -16,19 +15,23 @@ UI/UX: Ariah Pittman
 
 Course: DS 480 / IPRO 497  
 Instructors: [Robert Ellis](https://www.linkedin.com/in/robert-ellis-6914463/) & Ananya Bhooplam Praveen   
+Subject-matter Expert: Gina Iliopoulos - Keeler Gardens
+
 
 ## Summary
 
-An application to optimize your garden and take care of your plants. Features include a plant scanner to detect the health of the plant, a task calendar to monitor and organize tasks, a statistics dashboard that uploads live data from our companion sensor device, and a chat forum to engage in a community of other gardeners.
+An application to optimize your garden and take care of your plants. Features include a plant scanner to detect the health of the plant, a task calendar to monitor and organize tasks, a statistics dashboard that uploads live data from our companion sensor device, and weather dashboard to display current weather patterns.
+
+![alt text](Images/App_pages.png)
 
 **What problem are you solving?**  
-We are solving the problem of the low community of gardeners, we want to bring more attention to the beautiful community by introducing a new way of gardening and farming. Instead of guessing whether the plant is healthy, we have the device to tell the client if their plant is healthy.  
-**Why is it important?**  
-Indoor and backyard farming improves mental well-being by reducing stress and creating a calming connection to nature. It also helps people grow fresh, healthy food at home, reducing reliance on store-bought produce and lowering food costs.  
+We are solving the problem of the low community of gardeners, we want to bring more attention to the beautiful community by introducing a new way of gardening and farming. We want to build an accessible, beginner friendly mobile app that can mitigate the common issues aspiring gardeners face when starting out. For instance, instead of guessing whether the plant is healthy, we have the device to tell the client if their plant is healthy or unhealthy.    
+**Why is it important?**    
+Indoor and backyard farming improves mental well-being by reducing stress and creating a calming connection to nature. It also helps people grow fresh, healthy food at home, reducing reliance on store-bought produce and lowering food costs.      
 **Who is the stakeholder/sponsor?**  
-The stakeholders are the Chicagoans.  
+The stakeholders are the Chicagoans.    
 **What are your key results?**    
-From the machine learning side of the project, the model has a 88% accuracy score with the ability to tell the user why their plant is unhealthy. 
+From the machine learning side of the project, the model has a 88% accuracy score with the ability to tell the user why their plant is unhealthy. Other key results include connecting the companion device to be interfaced on the app and combining multiple sensors into one. 
 
 ## Introduction
 **Background of the problem**  
@@ -47,6 +50,7 @@ Bloom_Buddy/
 │── Plant_stress_predict/    # Notebooks and models for plant stress analysis and prediction  
 │── app/                     # Main application logic and user interface components  
 │── arduino/                 # Embedded system code for sensor data collection  
+|── backend/                 # Database & server backend logic for application
 │── Images/                  # Project images and visualizations  
 │── README.md                # Comprehensive project documentation  
 │── .gitattributes           # Repository configuration for consistent file handling
@@ -86,18 +90,18 @@ This figure illustrates the SHAP feature importance analysis for the plant stres
 </p>
 The following is the ER diagram that represents how the data is stored in the database. Each new plant gets their own individual plant identifier that is specific to them. The sensor readings are identified by both the id of the reading as well as the plant the reading is taken from. Each plant can have multiple sensor readings, but a sensor reading is only linked to one plant.
 
-# Software/Hardware Instructions
+## Software/Hardware Instructions
 
-## Server Startup
+### Server Startup
 ```bash
 # Open backend directory on current path
 cd backend
 
-# Create virtual environment for macOS
+# Create virtual environment 
 py -m venv env
 
 # Activate virtual environment
-  .\env\Scripts\activate
+.\env\Scripts\activate
 
 # Install packages
 pip install -r requirements.txt
@@ -105,7 +109,7 @@ pip install -r requirements.txt
 # Start server
 uvicorn server:app --host 0.0.0.0 --port 8000
 ```
-## App Startup
+### App Startup
 ```bash
 # Open app directory 
 cd ..
@@ -121,22 +125,23 @@ flutter pub get
 flutter run
 ```
 
-## Arduino Instructions
-### Wiring Diagram
+### Arduino Instructions
+
 <p align="center">
   <img src="Images/wiring_diagram.png" alt="diagram for hardware">
+  Wiring Diagram
 </p>
 
-### Setting Up Device
+#### Setting Up Device
 1. Connect the RS485 shield to the Arduino by slotting the shield's pins on top of the Arduino's slots
 2. Use a USB cable to connect the device to a computer
 3. Open the Arduino IDE and select the right board and port
-### Setting Up Sensors
+#### Setting Up Sensors
 1. Connect only the soil sensor and use the Arduino IDE to upload the "Set_Soil_Sensor_ID.ino"
 2. After running it, power cycle the sensor by turning it off, then on again
 3. Disconnect the soil sensor and plug in the light sensor
 4. Upload the "Set_Light_BAUD_Rate.ino" and power cycle the device
-### Assembling Device
+#### Assembling Device
 1. Plug in each wire to its respective slot
 2. Make sure no wires are touching another port's wires and that every wire is connected in the right place
 3. Edit "Sensor_reading.ino" and input wifi details and server IP address
@@ -152,6 +157,7 @@ flutter run
 
 - Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
 
+
 ## Future Work
-Our team would love to expand the app to have a community base component. Within the community side of the app, we would add future events within Chicago and post from gardeners from Chicago. (Add more from app team)  
-From the database/ML team we would love to get insight data from conservatory in Chicago and train the model on that data. 
+Our team would love to expand the app to have a community base component/forum. Within the community side of the app, we would add future events within Chicago and post from gardeners from Chicago. Additionally, we would add a prediction model for certain plant statistics and push notifications when a stat is abnormal to ideal ranges.
+From the database/ML team, we would love to get insight data from conservatory in Chicago and train the model on that data. 
