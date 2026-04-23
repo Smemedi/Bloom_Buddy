@@ -1,6 +1,5 @@
 #include <SoftwareSerial.h>
 #include <WiFiS3.h>
-#include <connection.h> //Contains wifi SSID, password, server IP address
 
 SoftwareSerial mod(2, 3);
 
@@ -9,9 +8,9 @@ const byte queryLight[] = {0x01, 0x03, 0x00, 0x02, 0x00, 0x02, 0x65, 0xCB};
 
 byte buf[30];
 
-const char* ssid     = "WIFI_SSID";
-const char* password = "WIFI_PASS";
-const char* server   = "IP_ADDR";
+const char* ssid     = "WIFI_SSID"; // Input WiFi SSID in quotes
+const char* password = "WIFI_PASS"; // Input WiFi password in quotes
+const char* server   = "IP_ADDR"; // Input IP address of server running backend
 const int   port     = 5000;
 
 WiFiClient client;

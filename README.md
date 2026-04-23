@@ -134,7 +134,9 @@ flutter run
 ### Assembling Device
 1. Plug in each wire to its respective slot
 2. Make sure no wires are touching another port's wires and that every wire is connected in the right place
-3. Upload "Sensor_Reading.ino" to device
+3. Edit "Sensor_reading.ino" and input wifi details and server IP address
+4. Upload edited "Sensor_Reading.ino" to device
+5. Ensure device is outputting data properly by looking at serial monitor at 9600 baud
 
 ## Data Access
 [Crop Health Dataset](https://www.kaggle.com/datasets/datasetengineer/crop-health-and-environmental-stress-dataset/data)
