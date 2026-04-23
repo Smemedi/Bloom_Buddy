@@ -26,17 +26,19 @@ We are solving the problem of the low community of gardeners, we want to bring m
 **Why is it important?**  
 Indoor and backyard farming improves mental well-being by reducing stress and creating a calming connection to nature. It also helps people grow fresh, healthy food at home, reducing reliance on store-bought produce and lowering food costs.  
 **Who is the stakeholder/sponsor?**  
-The stakeholders are the Chicagoans. 
-**What are your key results?**  
+The stakeholders are the Chicagoans.  
+**What are your key results?**    
 From the machine learning side of the project, the model has a 88% accuracy score with the ability to tell the user why their plant is unhealthy. 
 
 ## Introduction
-*this is more techinal*
-
-- Background of the problem
-- Context and motivation
-- Why this problem matters
-- Overview of your approach
+**Background of the problem**  
+Despite the growing popularity gardening, many individuals lack the technical knowledge required to effectively monitor plant health and optimize growth conditions. Traditional gardening often relies on manual observation and experience, which can lead to inconsistent results, misdiagnosis of plant diseases, and inefficient care routines.  
+**Context and motivation**  
+Recent advancements in mobile applications, Internet of Things (IoT) devices, and machine learning have created new opportunities to modernize plant care. The motivation behind this project is to unify these technologies into a single, cohesive system that enhances accessibility and usability for both novice and experienced gardeners.  
+**Why this problem matters**  
+Inefficient plant care not only discourages participation in gardening but also leads to wasted resources such as water, soil, and plant materials. Additionally, the absence of a strong, connected gardening community reduces knowledge sharing and long-term engagement. Addressing these challenges can improve user success rates, promote sustainable practices, and increase adoption of home-based food production.  
+**Overview of our approach**  
+This project proposes a multi-component application that integrates computer vision, IoT sensor data, and user interaction features. A neural network-based plant scanner analyzes images to detect signs of disease or stress, while a companion sensor device collects real-time environmental data such as soil moisture, temperature, and light levels. This data is processed and visualized through a statistics dashboard to provide actionable insights. 
 
 ## Project Structure
 ```
@@ -56,8 +58,7 @@ Bloom_Buddy/
 **1. Data Preprocessing**
 
 - Dataset: Agricultural sensor data loaded from CSV
-- Feature Selection: Dropped image-based features (RGB, multispectral, thermal, spatial) and kept edge-deployable sensor readings
-- Encoding: Crop types encoded numerically (Wheat=0, Rice=1, Maize=2)  
+- Feature Selection: Dropped image-based features (RGB, multispectral, thermal, spatial) and kept edge-deployable sensor readings  
 
 **2. Exploratory Data Analysis**  
 
@@ -95,10 +96,22 @@ Three resampling strategies compared:
 Final Model: ExtraTreesClassifier (n_estimators=150, max_depth=20) optimized for edge deployment with SHAP-based recommendations.  
 
 ## Result & Visualization
+<p align="center">
+<img src="Images/Model_Comparisons.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
+This chart compares the performance of multiple machine learning models evaluated during the project. Metrics such as accuracy, F1-score, and AUC-ROC are visualized for each classifier, allowing for a clear comparison of their strengths and weaknesses. The figure demonstrates why the ExtraTreesClassifier was selected as the final model for deployment.
 
-![ExrtaTreesMatrix](Images/ExtraTreesMatrix.png)
+<p align="center">
+<img src="Images/ExtraTreesMatrix.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
 
-## Negative Result
+This image displays the confusion matrix for the ExtraTreesClassifier model. It visually summarizes the model’s classification performance by showing the number of correct and incorrect predictions for each crop health class. The matrix highlights the model’s accuracy and any potential misclassifications, providing insight into which classes are most reliably predicted.
+
+<p align="center">
+<img src="Images/SHAP_impact_feat.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
+
+This figure illustrates the SHAP feature importance analysis for the plant stress prediction model. Each feature’s impact on the model’s output is shown, indicating which sensor readings most strongly influence the prediction of plant health or stress. The plot helps interpret the model by revealing the most critical factors affecting its decisions.
 
 # Software/Hardware Instructions
 
@@ -160,8 +173,10 @@ flutter run
 
 ## Conclusion
 
-## What did we learned?
+### What did we learned?
 
 - Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
 
 ## Future Work
+Our team would love to expand the app to have a community base component. Within the community side of the app, we would add future events within Chicago and post from gardeners from Chicago. (Add more from app team)  
+From the database/ML team we would love to get insight data from conservatory in Chicago and train the model on that data. 
