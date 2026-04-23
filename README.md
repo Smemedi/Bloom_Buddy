@@ -81,6 +81,11 @@ This image displays the confusion matrix for the ExtraTreesClassifier model. It 
 
 This figure illustrates the SHAP feature importance analysis for the plant stress prediction model. Each feature’s impact on the model’s output is shown, indicating which sensor readings most strongly influence the prediction of plant health or stress. The plot helps interpret the model by revealing the most critical factors affecting its decisions.
 
+<p align="center">
+<img src="Images/er_diagram.png" alt="ExtraTreesMatrix" width="400"/>
+</p>
+The following is the ER diagram that represents how the data is stored in the database. Each new plant gets their own individual plant identifier that is specific to them. The sensor readings are identified by both the id of the reading as well as the plant the reading is taken from. Each plant can have multiple sensor readings, but a sensor reading is only linked to one plant.
+
 # Software/Hardware Instructions
 
 ## Server Startup
