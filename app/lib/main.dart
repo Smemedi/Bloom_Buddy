@@ -10,6 +10,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'widgets/task_list.dart';
 import 'utils/task.dart';
+import 'calendar_screen.dart';
+import 'statistics_dashboard.dart';
 
 const String _owmApiKey = 'af12586bd2c4a19f1a1271f4bad3e7d6';
 void main() => runApp(const PlantApp());
@@ -797,43 +799,7 @@ class MessagesPage extends StatelessWidget {
   }
 }
 
-// ─── CALENDAR SCREEN ─────────────────────────────────────────────────
-class CalendarScreen extends StatelessWidget {
-  const CalendarScreen({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final topPad = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(18, topPad + 18, 18, 18),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-          Text('Calendar', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
-          SizedBox(height: 8),
-          Text('To be implemented...', style: TextStyle(color: Colors.black54)),
-        ]),
-      ),
-    );
-  }
-}
 
-// ─── BLOOM BUDDY (STATISTICS) ─────────────────────────────────────────
-class BloomBuddy extends StatelessWidget {
-  const BloomBuddy({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final topPad = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(18, topPad + 18, 18, 18),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
-          Text('Statistics', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
-          SizedBox(height: 8),
-          Text('To be implemented...', style: TextStyle(color: Colors.black54)),
-        ]),
-      ),
-    );
-  }
-}
 
 // ─── PLANT AVATAR ─────────────────────────────────────────────────────
 class PlantAvatar extends StatelessWidget {
