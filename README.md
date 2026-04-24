@@ -57,15 +57,15 @@ Bloom_Buddy/
 ```
 ## Methodology
 
-### Methodology for the ML plant stress prediction:
+### Plant stress prediction:
 
-The project starts with preprocessing agricultural sensor data from a CSV file, where certain features are removed to keep only edge-deployable sensor inputs. Exploratory data analysis follows, including target distribution, feature correlations, outlier detection using IQR, and distribution checks (skewness, normality, and KDE), along with pairplots of key features.
+The project starts with preprocessing agricultural sensor data from a CSV file, where certain features are removed to keep only edge-deployable sensor inputs. Exploratory data analysis follows, including target distribution, feature correlations, outlier detection using IQR, and distribution checks (skewness, normality, and KDE), along with pairplots of key features. *See the EDA section* → [link](Plant_stress_predict/Edge_plant_det.ipynb#EDA).
 
-To handle class imbalance, SMOTE, ADASYN, and random resampling are compared, with the latter creating a balanced dataset of 300K samples. The data is then split (80/20, stratified), normalized using StandardScaler, and evaluated across 11 classifiers using accuracy, F1-score, and AUC-ROC.
+To handle class imbalance, SMOTE, ADASYN, and random resampling are compared, with the latter creating a balanced dataset of 300K samples. *See the imabalnced data section* → [link](Plant_stress_predict/Edge_plant_det.ipynb#Fixing_Imbalanced_Data). The data is then split (80/20, stratified), normalized using StandardScaler, and evaluated across 10 classifiers using precision and F1-Score. *See ML comparions section* → [link](Plant_stress_predict/Edge_plant_det.ipynb#Prediction_Models).
 
-ExtraTreesClassifier performs best and is further optimized via grid search, balancing performance and model size. SHAP is used for interpretability, highlighting feature importance and identifying key stress factors affecting predictions.
+ExtraTreesClassifier performs best and is further optimized via grid search, balancing performance and model size. *See optimize model section*  → [link](Plant_stress_predict/Edge_plant_det.ipynb#Optimize_Model). SHAP is used for interpretability, highlighting feature importance and identifying key stress factors affecting predictions. *See SHAP analysis section*  → [link](Plant_stress_predict/Edge_plant_det.ipynb#SHAP_Analysis).
 
-Finally, the model, scaler, and encoder are saved and integrated into an inference script. The final model is an ExtraTreesClassifier (150 estimators, depth 20), optimized for edge deployment with SHAP-based insights.  
+Finally, the model, scaler, and encoder are saved and integrated into an inference script. The final model is an ExtraTreesClassifier (150 estimators, depth 20), optimized for edge deployment with SHAP-based insights. *See testing section*  → [link](Plant_stress_predict/Edge_plant_det.ipynb#Testing).
 
 ## Result & Visualization
 <p align="center">
