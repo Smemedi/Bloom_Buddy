@@ -69,9 +69,9 @@ Finally, the model, scaler, and encoder are saved and integrated into an inferen
 
 ## Result & Visualization
 <p align="center">
-<img src="Images/Model_Comparisons.png" alt="ExtraTreesMatrix" width="400"/>
+<img src="Images/model_comparison.png" alt="ExtraTreesMatrix" width="400"/>
 </p>
-This chart compares the performance of multiple machine learning models evaluated during the project. Metrics such as accuracy, F1-score, and AUC-ROC are visualized for each classifier, allowing for a clear comparison of their strengths and weaknesses. The figure demonstrates why the ExtraTreesClassifier was selected as the final model for deployment.
+This chart compares the performance of multiple machine learning models evaluated during the project. Metrics such as presicion and F1-Score are visualized for each classifier, allowing for a clear comparison of their strengths and weaknesses. The figure demonstrates why the ExtraTreesClassifier was selected as the final model for deployment.
 
 <p align="center">
 <img src="Images/ExtraTreesMatrix.png" alt="ExtraTreesMatrix" width="400"/>
