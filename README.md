@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Images/Plant_Buddy.png" alt="App Logo" width="200">
+  <img src="Images\plant_buddy_noback.png" alt="App Logo" width="200">
 </p>
 
 # Bloom Buddy 
