@@ -156,6 +156,8 @@ flutter run
 ### What did we learned?
 
 - Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
+  
+- Ariah Pittman: I learned how to navigate and work in such a large group to complete one goal. Being able to build upon my Dart and Flutter experience, I was able to learn additional widget features and how to ensure state management. I also learned about gardening itself after researching key components of what a user would need to know and what they wouldn't think they needed. User experience requires a lot of outside thinking to truly improve the experience for such a wide group.
 
 
 ## Future Work
