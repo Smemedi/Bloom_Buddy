@@ -168,7 +168,7 @@ flutter run
 
 ## Conclusion
 
-### What did we learned?
+### What did we learn?
 
 - Eileen Garay: learned how to address class imbalance by comparing popular oversampling techniques (SMOTE, ADASYN, Random Resampling). Additionally, I gained experience in hyperparameter optimization through grid search, testing various combinations of n_estimators and max_depth to balance model accuracy and storage efficiency.
   
