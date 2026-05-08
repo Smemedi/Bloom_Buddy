@@ -55,6 +55,17 @@ Bloom_Buddy/
 │── README.md                # Comprehensive project documentation  
 │── .gitattributes           # Repository configuration for consistent file handling
 ```
+
+# App Features
+1. Personalized Homepage featuring personal greeting, overview of owned plants, overview of tasks, and aesthetically pleasing design features.
+2. Lower taskbar that shows homepage, camera, calendar, and statistics. 
+3. A weather dashboard that is editable by City and State that gives lives update of weather changes, including high and low temperatures, humidity, and chance of rain.
+4. A camera function that detects plant type as well as potential diseases or reasons a plant may be at risk of dying.
+5. A calendar that tracks tasks as well as allows user to edit and add their own tasks. These tasks will guide them through taking care of their plant for as long as they have it.
+6. Data Trends that reflect changes in  the plant's health. It tracks when, for example, the moisture was at its lowest or at its highest.
+7. Statistics dashboard giving a brief overview of each plant's pH, moisture, and chemical elemeny present. 
+ 
+
 ## Methodology
 
 ### Plant stress prediction:
