@@ -90,7 +90,7 @@ This figure illustrates the SHAP feature importance analysis for the plant stres
 </p>
 The following is the ER diagram that represents how the data is stored in the database. Each new plant gets their own individual plant identifier that is specific to them. The sensor readings are identified by both the id of the reading as well as the plant the reading is taken from. Each plant can have multiple sensor readings, but a sensor reading is only linked to one plant.
 <p align="center">
-  <img src="Images/IPRO_Architecture.jpeg" alt="New app screen" width="400"/>
+  <img src="Images/IPRO_Architecture.jpeg" alt="New app screen" width="800"/>
 </p>
 
 A diagram of the app's complete architecture. The backend server was chosen to handle the most computationally demanding tasks such as image classification and machine learning. An SQL server was used to store all plant information captured by the sensors. A LLM interacts with the application by utilizing stored SQL data and verifiable sources to provide the user with things such as plant care tips. The chosen LLM was Llama-3.1:8B due to its quick response time and ability to run locally, but any LLM will work. 
